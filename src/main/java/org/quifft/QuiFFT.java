@@ -2,6 +2,7 @@ package org.quifft;
 
 import org.quifft.audioread.AudioReader;
 import org.quifft.audioread.AudioReaderFactory;
+import org.quifft.audioread.PCMReader;
 import org.quifft.fft.FFTComputationWrapper;
 import org.quifft.output.*;
 import org.quifft.params.FFTParameters;
@@ -9,6 +10,7 @@ import org.quifft.params.ParameterValidator;
 import org.quifft.params.WindowFunction;
 import org.quifft.sampling.SampleWindowExtractor;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,15 @@ public class QuiFFT {
      */
     public QuiFFT(File inputFile) throws IOException, UnsupportedAudioFileException {
         this.audioReader = AudioReaderFactory.audioReaderFor(inputFile);
+    }
+
+    /**
+     * Constructs a QuiFFT instance with an audio stream
+     * @param inputStream Audio stream for which FFT will be performed.
+     * @throws IOException
+     */
+    public QuiFFT(AudioInputStream inputStream) throws IOException, UnsupportedAudioFileException {
+        this.audioReader = new PCMReader(inputStream);
     }
 
     /**

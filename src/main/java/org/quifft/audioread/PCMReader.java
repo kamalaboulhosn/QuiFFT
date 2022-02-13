@@ -23,13 +23,28 @@ public class PCMReader extends AudioReader {
         getInputStream();
     }
 
+    /**
+     * The construction of a PCMReader from an existing {@link AudioInputStream}.
+     * @param stream The {@link AudioInputStream} from which to read.
+     */
+    public PCMReader(AudioInputStream stream) throws IOException, UnsupportedAudioFileException {
+        this.audio = null;
+        
+        // convert 8-bit audio into 16-bit
+        if(stream.getFormat().getSampleSizeInBits() == 8) {
+            getInputStreamAs8Bit(stream);
+        } else {
+            inputStream = stream;
+        }
+    }
+
     @Override
     public long getFileDurationMs() {
         AudioFormat format = inputStream.getFormat();
-        long audioFileLength = audio.length();
+        long audioFileLength = inputStream.getFrameLength();
         int frameSize = format.getFrameSize();
         float frameRate = format.getFrameRate();
-        return (long) Math.ceil((audioFileLength / (frameSize * frameRate)) * 1000);
+        return (long) (inputStream.getFrameLength() / (frameSize * frameRate) * 1000 * format.getChannels());
     }
 
     private void getInputStream() throws IOException, UnsupportedAudioFileException {

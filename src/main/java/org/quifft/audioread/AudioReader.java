@@ -55,8 +55,7 @@ public abstract class AudioReader implements Iterator<int[]> {
      * @throws IOException if an I/O exception occurs when the input stream is initialized
      * @throws UnsupportedAudioFileException if the file is not a valid audio file or has bit depth greater than 16
      */
-    void getInputStreamAs8Bit() throws IOException, UnsupportedAudioFileException {
-        AudioInputStream in = AudioSystem.getAudioInputStream(audio);
+    void getInputStreamAs8Bit(AudioInputStream in) throws IOException, UnsupportedAudioFileException {
         AudioFormat baseFormat = in.getFormat();
         AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
                 baseFormat.getSampleRate(),
@@ -66,6 +65,11 @@ public abstract class AudioReader implements Iterator<int[]> {
                 baseFormat.getSampleRate(),
                 false);
         this.inputStream = AudioSystem.getAudioInputStream(decodedFormat, in);
+    }
+
+    void getInputStreamAs8Bit() throws IOException, UnsupportedAudioFileException {
+        AudioInputStream in = AudioSystem.getAudioInputStream(audio);
+        getInputStreamAs8Bit(in);
     }
 
     /**

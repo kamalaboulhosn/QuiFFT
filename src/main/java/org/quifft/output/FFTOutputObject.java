@@ -50,7 +50,9 @@ public abstract class FFTOutputObject {
      * @param params parameters for FFT
      */
     public void setMetadata(AudioReader reader, FFTParameters params) {
-        this.fileName = reader.getFile().getName();
+        if (reader.getFile() != null) {
+            this.fileName = reader.getFile().getName();
+        }
 
         this.fileDurationMs = reader.getFileDurationMs();
 
@@ -69,7 +71,9 @@ public abstract class FFTOutputObject {
         StringBuilder builder = new StringBuilder();
         builder.append("== ").append(this instanceof FFTResult ? "FFTResult" : "FFTStream")
                 .append(" ==========================\n");
-        builder.append(String.format("File: %s\n", fileName));
+        if (fileName != null) {
+            builder.append(String.format("File: %s\n", fileName));
+        }
         builder.append(String.format("Audio sample rate: %d\n", (long) audioSampleRate));
         builder.append(String.format("Frequency resolution: %.3f Hz\n", frequencyResolution));
         builder.append(String.format("Windowing function: %s\n", fftParameters.windowFunction.toString()));
